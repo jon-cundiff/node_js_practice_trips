@@ -1,0 +1,19 @@
+<form method="POST" action="/{{url}}" class="trip-form">
+    <div class="form-field">
+        <label for="title">Trip Title</label>
+        <input type="text" name="title" placeholder="Enter a title for your trip" value="{{trip.title}}"required>
+    </div>
+    <div class="form-field">
+        <label for="title">Trip Image</label>
+        <input type="text" name="image" placeholder="Enter an image URL for your trip" value="{{trip.image}}" required>
+    </div>
+    <div class="form-field">
+        <label for="title">Depature Date</label>
+        <input type="date" name="departureDate" placeholder="Enter an image URL for your trip" value="{{trip.departureDate}}" required>
+    </div>
+    <div class="form-field">
+        <label for="title">Return Date</label>
+        <input type="date" name="returnDate" placeholder="Enter an image URL for your trip" value="{{trip.returnDate}}" required>
+    </div>
+    <button class="button submit">{{command}} Trip</button>
+</form>

@@ -1,0 +1,15 @@
+<div class="container">
+    <img src="{{image}}">
+    <div class="info">
+        <h3>{{title}}</h3>
+        <p><i>{{departureDate}}</i> - <i>{{returnDate}}</i></p>
+    </div>
+    <div class="actions">
+        <a href="/update-trip/{{tripId}}">
+            <button class="button">Update</button>
+        </a>
+        <form method="POST" action="/delete-trip/{{tripId}}">
+            <button class="button delete">Delete Trip</button>
+        </form>
+    </div>
+</div>

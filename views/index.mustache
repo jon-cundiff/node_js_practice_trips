@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{> head}}
+    <title>Trips</title>
+</head>
+<body>
+    {{> header}}
+    <div id="container">
+        <h2>Trips</h2> 
+        {{#trips}}
+            {{>trip}}
+        {{/trips}}
+        {{^trips}}
+            <div class="container"><h2>No trips found!</h2></div>
+        {{/trips}}
+    </div>
+</body>
+</html>
