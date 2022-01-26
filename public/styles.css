@@ -38,6 +38,30 @@
     font-weight: bold;
     color: white;
 }
+
+.sort {
+    display: flex;
+    column-gap: 1em;
+    height: 2em;
+    margin-bottom: 1em;
+    align-items: center;
+}
+
+.sort h4 {
+    margin-right: -0.5em;
+}
+
+.sort a {
+    text-decoration: none;
+    padding: 1em;
+    transition: 0.2s ease-in;
+}
+
+.sort a:hover {
+    background-color: rgb(240, 240, 250);
+    border-radius: 25px;
+}
+
 #container,
 .container {
     border-radius: 10px;
@@ -58,6 +82,10 @@
 
 .container:not(:last-child) {
     margin-bottom: 1em;
+}
+
+.img {
+    width: 26em;
 }
 
 .container img {

@@ -4,15 +4,7 @@ const mustacheExpress = require("mustache-express");
 const app = express();
 const PORT = 3000;
 
-let trips = [
-    {
-        title: "Store",
-        image: "https://images.unsplash.com/photo-1572764861775-3fc7fe6a76f0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80",
-        departureDate: "2022-01-01",
-        returnDate: "2022-01-02",
-        tripId: 1
-    }
-];
+let trips = [];
 
 app.engine("mustache", mustacheExpress("./views/partials"));
 app.set("views", "./views");
@@ -21,8 +13,29 @@ app.set("view engine", "mustache");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
+const makeDisplayedTrips = (query) => {
+    const displayedTrips = [...trips];
+    if (query.sort) {
+        displayedTrips.sort((a, b) => {
+            const dateA = new Date(a.departureDate);
+            const dateB = new Date(b.departureDate);
+            if (query.sort === "asc") {
+                return dateA - dateB;
+            } else if (query.sort === "des") {
+                return dateB - dateA;
+            } else {
+                return 0;
+            }
+        });
+    }
+
+    return displayedTrips;
+};
+
 app.get("/", (req, res) => {
-    res.render("index", { trips: trips });
+    const displayedTrips = makeDisplayedTrips(req.query);
+    const isNotEmpty = displayedTrips.length > 0;
+    res.render("index", { trips: displayedTrips, isNotEmpty: isNotEmpty });
 });
 
 app.get("/add-trip", (req, res) => {

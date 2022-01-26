@@ -8,12 +8,21 @@
     {{> header}}
     <div id="container">
         <h2>Trips</h2> 
-        {{#trips}}
-            {{>trip}}
-        {{/trips}}
-        {{^trips}}
+
+        {{#isNotEmpty}}
+        <div class="sort">
+            <h4>Sort:</h4>
+            <a href="/">None</a>
+            <a href="/?sort=asc">Oldest First</a>
+            <a href="/?sort=des">Most Recent First</a>
+        </div>
+            {{#trips}}
+                {{>trip}}
+            {{/trips}}
+        {{/isNotEmpty}}
+        {{^isNotEmpty}}
             <div class="container"><h2>No trips found!</h2></div>
-        {{/trips}}
+        {{/isNotEmpty}}
     </div>
 </body>
 </html>
