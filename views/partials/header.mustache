@@ -1,7 +1,15 @@
 <header id="header">
-    <h1>Trip Explorer</h1>
+    <h1><a href="/">Trip Explorer</a></h1>
     <div class="links">
+        {{#username}}
+        <p>{{username}}</p>
         <a href="/"><button class="button">All Trips</button></a>
-        <a href="/add-trip"><button class="button">Add A Trip</button></a>
+        <a href="/trips/add-trip"><button class="button">Add A Trip</button></a>
+        <a href="/logout"><button class="button">Logout</button></a>
+        {{/username}}
+        {{^username}}
+        <a href="/login"><button class="button">Log In</button></a>
+        <a href="/register"><button class="button">Sign Up</button></a>
+        {{/username}}
     </div>
 </header>

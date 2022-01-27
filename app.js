@@ -1,10 +1,15 @@
 const express = require("express");
+const session = require("express-session");
 const mustacheExpress = require("mustache-express");
+const { makeDisplayedTrips } = require("./util");
+const tripsRouter = require("./routes/trips");
 
 const app = express();
 const PORT = 3000;
 
-let trips = [];
+global.users = [];
+
+global.userTrips = {};
 
 app.engine("mustache", mustacheExpress("./views/partials"));
 app.set("views", "./views");
@@ -12,83 +17,113 @@ app.set("view engine", "mustache");
 
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
+app.use(
+    session({
+        secret: "thisissecret",
+        saveUninitialized: true,
+        resave: true
+    })
+);
 
-const makeDisplayedTrips = (query) => {
-    const displayedTrips = [...trips];
-    if (query.sort) {
-        displayedTrips.sort((a, b) => {
-            const dateA = new Date(a.departureDate);
-            const dateB = new Date(b.departureDate);
-            if (query.sort === "asc") {
-                return dateA - dateB;
-            } else if (query.sort === "des") {
-                return dateB - dateA;
-            } else {
-                return 0;
-            }
+app.use("/trips", tripsRouter);
+
+app.get("/", (req, res) => {
+    const renderArgs = {};
+    if (req.session) {
+        if (req.session.username) {
+            const { username } = req.session;
+            renderArgs.trips = makeDisplayedTrips(
+                userTrips[username],
+                req.query
+            );
+            renderArgs.isNotEmpty = renderArgs.trips.length > 0;
+            renderArgs.username = username;
+        }
+    }
+    res.render("index", { ...renderArgs });
+});
+
+app.get("/login", (req, res) => {
+    if (req.session) {
+        if (req.session.username) {
+            return res.redirect("/");
+        }
+    }
+
+    res.render("userCredentials", { url: "login", caption: "Log In" });
+});
+
+app.post("/login", (req, res) => {
+    const { username, password } = req.body;
+    let error = "";
+    let user;
+
+    if (!username || !password) {
+        error = "Username and Password required!";
+    } else {
+        user = users.find(
+            (user) => user.username === username && user.password === password
+        );
+        error = user ? "" : "Username or Password does not match.";
+    }
+
+    if (error) {
+        return res.render("userCredentials", {
+            error,
+            url: "login",
+            caption: "Log In"
         });
     }
 
-    return displayedTrips;
-};
-
-app.get("/", (req, res) => {
-    const displayedTrips = makeDisplayedTrips(req.query);
-    const isNotEmpty = displayedTrips.length > 0;
-    res.render("index", { trips: displayedTrips, isNotEmpty: isNotEmpty });
-});
-
-app.get("/add-trip", (req, res) => {
-    res.render("tripDetails", { command: "Add", url: "add-trip" });
-});
-
-app.post("/add-trip", (req, res) => {
-    const { title, image, departureDate, returnDate } = req.body;
-    const newTrip = {
-        tripId: trips.length + 1,
-        title,
-        image,
-        departureDate,
-        returnDate
-    };
-
-    trips.push(newTrip);
+    req.session.username = user.username;
     res.redirect("/");
 });
 
-app.get("/update-trip/:tripId", (req, res) => {
-    const tripId = parseInt(req.params.tripId);
-    const trip = trips.find((trip) => trip.tripId === tripId);
-    if (!trip) {
-        return res.redirect("/not-found");
+app.get("/register", (req, res) => {
+    if (req.session) {
+        if (req.session.username) {
+            return res.redirect("/");
+        }
     }
 
-    res.render("tripDetails", {
-        command: "Update",
-        url: `update-trip/${tripId}`,
-        trip: trip
+    res.render("userCredentials", {
+        url: "register",
+        caption: "Register Account"
     });
 });
 
-app.post("/update-trip/:tripId", (req, res) => {
-    const tripId = parseInt(req.params.tripId);
-    const trip = trips.find((trip) => trip.tripId === tripId);
-    if (!trip) {
-        return res.redirect("/not-found");
+app.post("/register", (req, res) => {
+    const { username, password } = req.body;
+    let error = "";
+
+    if (!username || !password) {
+        error = "Username and Password required!";
+    } else {
+        error = userTrips[username]
+            ? "Username Taken. Please pick another username."
+            : "";
     }
 
-    const { title, image, departureDate, returnDate } = req.body;
-    trip.title = title;
-    trip.image = image;
-    trip.departureDate = departureDate;
-    trip.returnDate = returnDate;
+    if (error) {
+        return res.render("userCredentials", {
+            error,
+            url: "register",
+            caption: "Register Account"
+        });
+    }
 
+    const newUser = { username, password };
+    users.push(newUser);
+    userTrips[username] = [];
+
+    req.session.username = username;
     res.redirect("/");
 });
 
-app.post("/delete-trip/:tripId", (req, res) => {
-    const tripId = parseInt(req.params.tripId);
-    trips = trips.filter((trip) => trip.tripId !== tripId);
+app.get("/logout", (req, res) => {
+    if (req.session) {
+        req.session.destroy();
+    }
     res.redirect("/");
 });
 
@@ -98,4 +133,5 @@ app.get("/not-found", (req, res) => {
 app.get("*", (req, res) => {
     res.redirect("/not-found");
 });
+
 app.listen(PORT, () => console.log(`Trips running on port ${PORT}`));

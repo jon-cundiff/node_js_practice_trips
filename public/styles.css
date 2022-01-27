@@ -3,11 +3,15 @@
     flex-direction: column;
 }
 
+#header h1 a {
+    text-decoration: none;
+    color: black;
+}
+
 .links {
     display: flex;
     flex-direction: column;
     width: 100%;
-    column-gap: 2em;
     row-gap: 0.6em;
 }
 
@@ -19,6 +23,14 @@
 .links a button {
     padding: 5px;
     width: 100%;
+}
+
+.error {
+    text-align: center;
+    color: red;
+    border: 2px solid red;
+    background-color: rgba(255, 0, 0, 0.1);
+    padding: 1em;
 }
 
 .button {
@@ -108,13 +120,13 @@
     width: 9em;
 }
 
-.trip-form {
+.form {
     display: flex;
     flex-direction: column;
     row-gap: 1.5em;
 }
 
-.trip-form button {
+.form button {
     padding: 1em 0;
 }
 
@@ -135,7 +147,9 @@
 
     .links {
         flex-direction: row;
-        width: 16em;
+        column-gap: 0.6em;
+        width: 28em;
+        justify-content: flex-end;
     }
 
     .links a button {
