@@ -136,6 +136,89 @@
     row-gap: 4px;
 }
 
+#revealChatButton {
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+    width: 8em;
+    background-color: navy;
+    color: white;
+    font-weight: bolder;
+    padding: 0.8em;
+    border-radius: 25px;
+    transition: right 0.5s ease-in;
+    z-index: 1;
+    box-shadow: -5px -5px 10px white, 5px 5px 10px white, -5px 5px 10px white,
+        5px -5px 10px white;
+}
+
+#revealChatButton.active {
+    right: 27.5em;
+}
+
+#chatboxContainer {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.6em;
+    padding: 1em;
+    width: 20em;
+    box-shadow: 0 -1px 15px rgba(10, 10, 10.4);
+    height: 96%;
+    top: 0;
+    right: -22em;
+    background-color: white;
+    transition: right 0.5s ease-in;
+}
+
+#chatboxContainer.active {
+    right: 0;
+}
+
+#chatMessages {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.4em;
+}
+
+.chat-message {
+    box-shadow: 0 0 5px black;
+    padding: 0.5em;
+    max-width: 200px;
+    min-width: 75px;
+    width: fit-content;
+    border-radius: 15px;
+}
+
+.is-me {
+    align-self: flex-end;
+    background-image: linear-gradient(lightcyan 65%, gray);
+    border-top-right-radius: 0;
+}
+
+.is-other {
+    border-top-left-radius: 0;
+    background-image: linear-gradient(pink 65%, gray);
+}
+
+.chat-message h4 {
+    margin: 0;
+}
+
+#chatControl {
+    display: flex;
+    column-gap: 0.7em;
+}
+
+#messageInput {
+    width: 100%;
+}
+
+#sendMessageButton {
+    width: 6em;
+}
+
 @media screen and (min-width: 550px) {
     #header {
         flex-direction: row;
