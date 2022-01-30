@@ -3,20 +3,24 @@
     <select name="chatRoom" id="chatRoomSelect">
         <option value="">Choose a regional room to chat with...</option>
     </select>
+    <h4 id="roomUserCount"></h4>
     <div id="chatMessages">
-        <div class="chat-message is-me">
+        <div class="no-room">
+            <h3>Please select a room to join.</h3>
+        </div>
+        {{! <div class="chat-message is-me">
             <h4>Paco</h4>
             <p>Hi aksljdf;ljsa aisupoiuj ;lkjasdflkj ;lkjsadf</p>
         </div>
         <div class="chat-message is-other">
             <h4>Jack</h4>
             <p>Hi</p>
-        </div>
+        </div> }}
     </div>
 
     <div id="chatControl">
-        <input type="text" id="messageInput" />
-        <button class="button" id="sendMessageButton">Send</button>
+        <input type="text" id="messageInput" disabled/>
+        <button class="button" id="sendMessageButton" disabled>Send</button>
     </div>
 </aside>
 
